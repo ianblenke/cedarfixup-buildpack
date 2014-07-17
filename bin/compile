@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ln -s /usr/lib/x86_64-linux-gnu/libevent.so /usr/lib/x86_64-linux-gnu/libevent-1.4.so.2
