@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-ln -s /usr/lib/x86_64-linux-gnu/libevent.so /usr/lib/x86_64-linux-gnu/libevent-1.4.so.2
+BUILD_DIR=$1
+
+LIBDIR=$BUILD_DIR/.cedarfixup
+mkdir -p $LIBDIR
+ln -s /usr/lib/x86_64-linux-gnu/libevent.so $LIBDIR/libevent-1.4.so.2
+
+mkdir -p $BUILD_DIR/.profile.d
+echo 'export APP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."' >> $BUILD_DIR/.profile.d/cedarfixup
+echo 'export LD_LIBRARY_PATH=$APP_DIR/.cedarfixup:$LD_LIBRARY_PATH' >> $BUILD_DIR/.profile/cedarfixup
