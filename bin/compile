@@ -9,9 +9,23 @@ ln -s /usr/lib/x86_64-linux-gnu/libevent.so $LIBDIR/libevent-1.4.so.2
 mkdir -p $BUILD_DIR/.profile.d
 
 # Fix the pgbouncer buildpack libevent library problem
-echo 'export APP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."' >> $BUILD_DIR/.profile.d/cedarfixup
-echo 'export LD_LIBRARY_PATH=$APP_DIR/.cedarfixup:$LD_LIBRARY_PATH' >> $BUILD_DIR/.profile.d/cedarfixup
+cat <<EOF > $BUILD_DIR/.profile.d/cedarfixup
+# Prepare the APP_DIR variable (should end up effectively being /app)
+export APP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
+
+# Set the dynamic library path to include .cedarfixup generated at buildpack compile time
+export LD_LIBRARY_PATH=$APP_DIR/.cedarfixup:$LD_LIBRARY_PATH
 
 # Fix those nasty perl warnings "perl: warning: Please check that your locale settings:"
-echo 'locale-gen en_US en_US.UTF-8' >> $BUILD_DIR/.profile.d/cedarfixup
+locale-gen en_US en_US.UTF-8
+
+# Fix apt sources.list
+perl -pi -e "s%archive.ubuntu.com/ubuntu%old-releases.ubuntu.com/ubuntu%g" /etc/apt/sources.list
+
+# Rebuild the apt index, but don't stop if we error out
+apt-get update || true
+
+# Upgrade the packages, not that Quantal has any ongoing support now - might as well make it as recent as possible
+LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -f -y || true
+EOF
 
