@@ -25,7 +25,8 @@ perl -pi -e "s%archive.ubuntu.com/ubuntu%old-releases.ubuntu.com/ubuntu%g" /etc/
 # Rebuild the apt index, but don't stop if we error out
 apt-get update || true
 
-# Upgrade the packages, not that Quantal has any ongoing support now - might as well make it as recent as possible
-LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -f -y || true
+### Disabling this for now, nothing is critically different from the base progrium/cedarish image
+## Upgrade the packages, not that Quantal has any ongoing support now - might as well make it as recent as possible
+##LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -f -y || true
 EOF
 
