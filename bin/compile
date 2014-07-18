@@ -7,8 +7,11 @@ mkdir -p $LIBDIR
 ln -s /usr/lib/x86_64-linux-gnu/libevent.so $LIBDIR/libevent-1.4.so.2
 
 mkdir -p $BUILD_DIR/.profile.d
+
+# Fix the pgbouncer buildpack libevent library problem
 echo 'export APP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."' >> $BUILD_DIR/.profile.d/cedarfixup
 echo 'export LD_LIBRARY_PATH=$APP_DIR/.cedarfixup:$LD_LIBRARY_PATH' >> $BUILD_DIR/.profile.d/cedarfixup
 
 # Fix those nasty perl warnings "perl: warning: Please check that your locale settings:"
-locale-gen en_US en_US.UTF-8 || true
+echo 'locale-gen en_US en_US.UTF-8' >> $BUILD_DIR/.profile.d/cedarfixup
+
