@@ -20,7 +20,9 @@ export LD_LIBRARY_PATH=$APP_DIR/.cedarfixup:$LD_LIBRARY_PATH
 locale-gen en_US en_US.UTF-8
 
 # Fix apt sources.list
-perl -pi -e "s%archive.ubuntu.com/ubuntu%old-releases.ubuntu.com/ubuntu%g" /etc/apt/sources.list
+if ! grep -qe 'utopic\|trusty\|saucy\|precise\|lucid' /etc/apt/sources.list ; then
+  perl -pi -e "s%archive.ubuntu.com/ubuntu%old-releases.ubuntu.com/ubuntu%g" /etc/apt/sources.list
+fi
 
 ### Disabling this for now, nothing is critically different from the base progrium/cedarish image
 # Rebuild the apt index, but don't stop if we error out
