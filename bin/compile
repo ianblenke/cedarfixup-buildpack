@@ -10,6 +10,9 @@ mkdir -p $BUILD_DIR/.profile.d
 
 # Fix the pgbouncer buildpack libevent library problem
 cat <<EOF > $BUILD_DIR/.profile.d/cedarfixup
+# Enable shell debugging
+[ -n "${CEDAR_SHELL_DEBUG} ] && set -x
+
 # Prepare the APP_DIR variable (should end up effectively being /app)
 export APP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
