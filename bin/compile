@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
 
 LIBDIR=$BUILD_DIR/.cedarfixup
 mkdir -p $LIBDIR
@@ -37,4 +39,8 @@ fi
 # HACK: give daemon user RW access to /tmp (Deis #3)
 usermod -aG root daemon || true
 EOF
+
+APT_CACHE_PATH=$CACHE_DIR/apt
+mkdir -p $APT_CACHE_PATH
+echo "Dir::Cache::Archives \"$APT_CACHE_PATH\";" > /etc/apt/apt.conf.d/cedarfixup
 
